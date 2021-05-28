@@ -49,6 +49,6 @@ First of all, make sure you don't have anything running (postgres, redis, rabbit
  - Your RabbitMQ admin panel will be at `http://localhost:15672`
  - Your Redis admin panel will be at `http://localhost:8081`
  - Your Swagger documentation will be at `http://localhost:3333/api`
- - Your GraphQL playground will be at `http://localhost:3333/api`
+ - Your GraphQL playground will be at `http://localhost:3333/graphql`
 
 This project was generated using [Nx](https://nx.dev).
