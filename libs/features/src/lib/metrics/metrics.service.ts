@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  IMetrics,
   MetricsEntity,
   metricsEntityFromJSON,
   PatchMetricsDto,
@@ -49,7 +48,7 @@ export class MetricsService {
     return this._metricsEntityRepository.findByIds(ids);
   }
 
-  async findOne(criteria: FindOneOptions<MetricsEntity>): Promise<IMetrics> {
+  async findOne(criteria: FindOneOptions<MetricsEntity>) {
     return this._metricsEntityRepository.findOne(criteria);
   }
 

@@ -1,7 +1,9 @@
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { METRICS_PATCH_COMMITTED } from '@tweets/features';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,9 +14,27 @@ import { MetricsModule } from './metrics/metrics.module';
     MetricsModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot({
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: join(process.cwd(), 'schema/schema.gql'),
       installSubscriptionHandlers: true,
       sortSchema: true,
+    }),
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const user = configService.get('RABBITMQ_USER');
+        const password = configService.get('RABBITMQ_PASSWORD');
+        const host = configService.get('RABBITMQ_HOST');
+        return {
+          exchanges: [
+            {
+              name: METRICS_PATCH_COMMITTED,
+              type: 'topic',
+            },
+          ],
+          uri: `amqp://${user}:${password}@${host}`,
+        };
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

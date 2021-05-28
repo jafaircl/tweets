@@ -8,7 +8,7 @@ scalar Date
 type MetricsEntity {
   createdAt: Date!
   favorites: Float!
-  id: String!
+  id: ID!
   impressions: Float!
   media_clicks: Float!
   replies: Float!
@@ -20,4 +20,8 @@ type MetricsEntity {
 
 type Query {
   findMetricsByTweetID(id: String!): MetricsEntity!
+}
+
+type Subscription {
+  subscribeToMetricsByTweetIDs(ids: [String!]!): MetricsEntity!
 }

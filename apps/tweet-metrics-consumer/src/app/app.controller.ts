@@ -1,6 +1,11 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { MetricsService, METRICS_PATCH_REQUESTED } from '@tweets/features';
+import {
+  MetricsService,
+  METRICS_PATCH_COMMITTED,
+  METRICS_PATCH_REQUESTED,
+} from '@tweets/features';
 import {
   metricsEntityFromJSON,
   PatchMetricsDto,
@@ -11,7 +16,10 @@ import { validate } from 'class-validator';
 
 @Controller()
 export class AppController {
-  constructor(private readonly _metricsService: MetricsService) {}
+  constructor(
+    private readonly _amqpConnection: AmqpConnection,
+    private readonly _metricsService: MetricsService
+  ) {}
 
   @MessagePattern(METRICS_PATCH_REQUESTED)
   async handleMetricsPatchRequested(
@@ -62,6 +70,11 @@ export class AppController {
         updatedMetricsObject
       );
     }
+    this._amqpConnection.publish(
+      METRICS_PATCH_COMMITTED,
+      METRICS_PATCH_COMMITTED,
+      { id: metrics.id, tweetID: metrics.tweetID }
+    );
     return metrics;
   }
 }

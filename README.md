@@ -10,6 +10,8 @@ This exposes a PATCH endpoint that allows you to send a request to store tweet m
 
 GET endpoints are cached with Redis (with a configurable timeout and cache size) to ease the load on the API.
 
+There is also a GraphQL endpoint that exposes a `findMetricsByTweetID` query (backed by the same Redis cache as GET REST operations) and a `subscribeToMetricsByTweetIDs` subscription. The subscription uses Redis for Pub/Sub operations for resiliency.
+
 ## Starting up
 
 Add a `.env` file in the root directory with this shape:
@@ -40,13 +42,13 @@ HTTP_PASSWORD=admin
 ## Running the apps
 
 First of all, make sure you don't have anything running (postgres, redis, rabbitmq, etc) on ports 5432, 5672, 6379, 8080, 8081, or 15672. Then, from the root, run:
-    - `docker compose up` to start the postgres database, pgAdmin, RabbitMQ and redis
-    - `npm run start-services-dev` to start the API and microservices in development mode
+ - `docker compose up` to start the postgres database, pgAdmin, RabbitMQ and redis
+ - `npm run start-services-dev` to start the API and microservices in development mode
 
-Your Postgres admin panel will be at `http://localhost:8080`
-Your RabbitMQ admin panel will be at `http://localhost:15672`
-Your Redis admin panel will be at `http://localhost:8081`
-Your Swagger documentation will be at `http://localhost:3333/api`
-Your GraphQL playground will be at `http://localhost:3333/api`
+ - Your Postgres admin panel will be at `http://localhost:8080`
+ - Your RabbitMQ admin panel will be at `http://localhost:15672`
+ - Your Redis admin panel will be at `http://localhost:8081`
+ - Your Swagger documentation will be at `http://localhost:3333/api`
+ - Your GraphQL playground will be at `http://localhost:3333/api`
 
 This project was generated using [Nx](https://nx.dev).
