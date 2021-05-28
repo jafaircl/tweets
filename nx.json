@@ -21,6 +21,18 @@
   "projects": {
     "api": {
       "tags": []
+    },
+    "models": {
+      "tags": []
+    },
+    "utils": {
+      "tags": []
+    },
+    "features": {
+      "tags": []
+    },
+    "tweet-metrics-consumer": {
+      "tags": []
     }
   }
 }

@@ -1,0 +1,23 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Date custom scalar type"""
+scalar Date
+
+type MetricsEntity {
+  createdAt: Date!
+  favorites: Float!
+  id: String!
+  impressions: Float!
+  media_clicks: Float!
+  replies: Float!
+  retweets: Float!
+  tweetID: String!
+  updatedAt: Date!
+  version: Float!
+}
+
+type Query {
+  findMetricsByTweetID(id: String!): MetricsEntity!
+}

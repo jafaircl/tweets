@@ -1,0 +1,89 @@
+version: "3.8"
+services:
+    postgres:
+        container_name: postgres
+        image: postgres:latest
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./data/postgres:/data/postgres
+        env_file:
+            - .env
+        networks:
+            - postgres
+ 
+    pgadmin:
+        links:
+            - postgres:postgres
+        container_name: pgadmin
+        image: dpage/pgadmin4
+        ports:
+            - "8080:80"
+        volumes:
+            - ./data/pgadmin:/root/.pgadmin
+        env_file:
+            - .env
+        networks:
+            - postgres
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq
+        hostname: rabbitmq
+        volumes:
+            - ./data/rabbitmq:/var/lib/rabbitmq
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        env_file:
+            - .env
+
+    redis:
+        image: redis:alpine
+        container_name: redis
+        volumes:
+            - ./data/redis:/var/lib/redis
+        ports:
+            - "6379:6379"
+        env_file:
+            - .env
+    
+    redis-commander:
+        image: rediscommander/redis-commander:latest
+        ports:
+            - "8081:8081"
+        environment:
+            - REDIS_HOSTS=${REDIS_HOSTS}
+            - HTTP_USER=${HTTP_USER}
+            - HTTP_PASSWORD=${HTTP_PASSWORD}
+        depends_on:
+            - redis
+
+    # In producetion, we could also run the api and microservice after running `npm run create-docker-images`
+    # api:
+    #     container_name: api
+    #     image: api
+    #     ports:
+    #         - "3333:3333"
+    #     env_file:
+    #         - .env
+    #     depends_on:
+    #         - postgres
+    #         - rabbitmq
+    #         - redis
+
+    # tweet-metrics-consumer:
+    #     container_name: tweet-metrics-consumer
+    #     image: tweet-metrics-consumer
+    #     env_file:
+    #         - .env
+    #     depends_on:
+    #         - postgres
+    #         - rabbitmq
+    #         - redis
+ 
+networks:
+    postgres:
+        driver: bridge
+    webnet:
+        driver: bridge
