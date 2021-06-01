@@ -7,6 +7,7 @@ This exposes a PATCH endpoint that allows you to send a request to store tweet m
  - We can scale the number of consumers (and server costs) with demand.
  - If the consumer dies before handling the update, we can retry it.
  - It will allow us to keep track of messages that were not handled so that we can debug.
+ - If we decide that JavaScript is too slow to do the work required for handling the message, we can easily rewrite the microservice in a faster language without having to overhaul an entire app.
 
 GET endpoints are cached with Redis (with a configurable timeout and cache size) to ease the load on the API.
 
